@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Trading Journal Pro</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+<header><div><h1>MY <span>TRADING</span> JOURNAL</h1><p>PERSONAL TRADING PERFORMANCE SYSTEM</p></div><span class="live">● LOCAL APP</span></header>
+<div class="accountbar"><label for="accountSelect">SELECT ACCOUNT</label><select id="accountSelect"><option value="2500">$2,500 Account</option><option value="5000" selected>$5,000 Account</option><option value="10000">$10,000 Account</option></select><span id="accountTag">$5,000 ACCOUNT</span></div>
+<nav>
+<button class="tab active" data-tab="dashboard">Dashboard</button><button class="tab" data-tab="risk">Risk Calculator</button><button class="tab" data-tab="trades">Trade History</button><button class="tab" data-tab="calendar">Calendar</button><button class="tab" data-tab="challenge">Challenge Progress</button><button class="tab" data-tab="settings">Settings / Backup</button>
+</nav>
+<main>
+<section id="dashboard" class="page active">
+<div class="heading"><div><small>ACCOUNT OVERVIEW</small><h2 id="dashTitle">$5,000 Challenge</h2></div><span class="pill" id="phaseLabel">PHASE 1</span></div>
+<div class="stats">
+<div class="card"><small>Current Balance</small><strong id="balance">$5,000.00</strong></div>
+<div class="card"><small>Total Profit / Loss</small><strong id="totalPL">$0.00</strong></div>
+<div class="card"><small>Win Rate</small><strong id="winRate">0%</strong></div>
+<div class="card"><small>Total Trades</small><strong id="totalTrades">0</strong></div>
+<div class="card"><small>Winning Trades</small><strong class="green" id="wins">0</strong></div>
+<div class="card"><small>Losing Trades</small><strong class="red" id="losses">0</strong></div>
+<div class="card"><small>Best Trade</small><strong id="bestTrade">$0.00</strong></div>
+<div class="card"><small>Worst Trade</small><strong id="worstTrade">$0.00</strong></div>
+</div>
+<div class="panel"><div class="line"><h3>Challenge Target Progress</h3><b id="targetPct">0%</b></div><div class="progress"><i id="targetBar"></i></div><div class="line muted"><span id="targetEarned">$0 / $400</span><span id="targetName">Phase 1 target</span></div></div>
+<div class="panel"><h3>Equity / Profit History</h3><canvas id="profitChart" width="900" height="230"></canvas></div>
+<div class="panel"><h3>Recent Trades</h3><div class="tablewrap"><table><thead><tr><th>Date</th><th>Symbol</th><th>Side</th><th>Lot</th><th>P/L</th></tr></thead><tbody id="recentTrades"></tbody></table></div><p id="noRecent" class="muted">No trades recorded for this account.</p></div>
+</section>
+<section id="risk" class="page">
+<h2>Risk Calculator</h2><div class="panel">
+<p class="muted">Risk settings belong only to the currently selected account.</p>
+<div class="formgrid">
+<div><label>Account Balance ($)</label><input id="riskBalance" type="number" min="0"></div>
+<div><label>Risk per Trade ($)</label><input id="riskAmount" type="number" min="0" step=".01"></div>
+<div><label>Lot Size</label><input id="lotSize" type="number" min=".01" step=".01" value=".03"></div>
+<div><label>Stop Loss (Pips)</label><input id="slPips" type="number" min="0" step=".01" value="40"></div>
+<div><label>Pip value per 0.01 lot ($)</label><input id="pipValue" type="number" min="0" step=".001" value=".10"></div>
+</div>
+<div class="stats two"><div class="card"><small>Estimated Risk ($)</small><strong class="red" id="estimatedRisk">$12.00</strong></div><div class="card"><small>Risk Percentage</small><strong id="riskPercent">0.24%</strong></div><div class="card"><small>Suggested SL (pips)</small><strong id="suggestedSL">41.67</strong></div><div class="card"><small>Risk Status</small><strong id="riskStatus">Within Plan</strong></div></div>
+<p class="note">Important: pip value depends on the instrument, contract size and account currency. The default assumes 0.01 lot = $0.10 per pip. Spread, commission and slippage are not included. Verify values for each symbol.</p>
+</div>
+<div class="panel"><h3>Fixed-risk lot reference</h3><div class="tablewrap"><table><thead><tr><th>Lot</th><th>SL Pips</th><th>Approx. Loss</th></tr></thead><tbody id="riskReference"></tbody></table></div></div>
+</section>
+<section id="trades" class="page">
+<h2>Trade History</h2><div class="panel"><h3>Add New Trade</h3>
+<form id="tradeForm" class="formgrid">
+<div><label>Date</label><input id="tradeDate" type="date" required></div><div><label>Symbol</label><input id="symbol" placeholder="XAUUSD" required></div>
+<div><label>Direction</label><select id="side"><option>Buy</option><option>Sell</option></select></div><div><label>Lot Size</label><input id="tradeLot" type="number" min=".01" step=".01" required></div>
+<div><label>Entry Price</label><input id="entry" type="number" step="any"></div><div><label>Exit Price</label><input id="exit" type="number" step="any"></div>
+<div><label>SL (pips)</label><input id="tradeSL" type="number" step="any"></div><div><label>Profit / Loss ($)</label><input id="tradePL" type="number" step=".01" required></div>
+<div class="full"><label>Trade Notes</label><textarea id="notes" rows="2" placeholder="Setup, reason, emotions, mistakes..."></textarea></div>
+<div class="full"><button class="primary">Save Trade</button></div>
+</form></div>
+<div class="panel"><h3>All Trades – selected account</h3><div class="tablewrap"><table><thead><tr><th>Date</th><th>Symbol</th><th>Side</th><th>Lot</th><th>P/L</th><th></th></tr></thead><tbody id="allTrades"></tbody></table></div><p id="noTrades" class="muted">No trades yet.</p></div>
+</section>
+<section id="calendar" class="page"><div class="line"><h2>Trading Calendar</h2><div><button id="prevMonth">‹</button> <b id="monthLabel"></b> <button id="nextMonth">›</button></div></div><div class="panel"><div class="calendar" id="calendarGrid"></div><p class="muted">Green = profitable day · Red = losing day</p></div><div class="panel"><h3 id="selectedDayTitle">Daily Summary</h3><div id="selectedDaySummary" class="muted">Select a date.</div></div></section>
+<section id="challenge" class="page"><h2>Challenge Progress</h2><div class="panel"><p class="muted">Default targets are editable in Settings. Confirm your firm's current rules before trading.</p><div class="milestone"><input type="checkbox" id="phase1Passed"><label for="phase1Passed"><b>Phase 1 Passed</b><small>Target: <span id="p1target"></span></small></label></div><div class="milestone"><input type="checkbox" id="phase2Passed"><label for="phase2Passed"><b>Phase 2 Passed</b><small>Target: <span id="p2target"></span></small></label></div><div class="milestone"><input type="checkbox" id="funded"><label for="funded"><b>Funded Account Received</b><small>Mark only after receiving confirmation.</small></label></div><div class="progress"><i id="milestoneBar"></i></div><p id="milestoneCount" class="muted">0 / 3 milestones completed</p><h3 id="fundedBadge">🔒 Funded Trader milestone pending</h3></div></section>
+<section id="settings" class="page"><h2>Account Settings</h2><div class="panel"><div class="formgrid">
+<div class="full"><label>Account Display Name</label><input id="accountName"></div>
+<div><label>Starting Balance ($)</label><input id="startingBalance" type="number"></div><div><label>Risk per Trade ($)</label><input id="settingRisk" type="number" step=".01"></div>
+<div><label>Phase 1 Target (%)</label><input id="phase1Target" type="number" step=".1"></div><div><label>Phase 2 Target (%)</label><input id="phase2Target" type="number" step=".1"></div>
+<div><label>Daily Loss Limit (%)</label><input id="dailyLimit" type="number" step=".1"></div><div><label>Max Loss Limit (%)</label><input id="maxLimit" type="number" step=".1"></div>
+<div class="full"><label>Current Phase</label><select id="currentPhase"><option value="1">Phase 1</option><option value="2">Phase 2</option><option value="3">Funded</option></select></div>
+<div class="full"><button id="saveSettings" type="button" class="primary">Save Settings for This Account</button></div>
+</div></div>
+<div class="panel"><h3>Backup & Export (selected account)</h3><div class="actions"><button id="exportCSV">Export CSV (Excel)</button><button id="exportJSON">Download Backup</button><label class="filebtn">Restore Backup<input id="importJSON" type="file" accept=".json,application/json"></label><button id="printReport">Print / Save PDF</button></div><p class="note">Each account has separate data. Backups are saved per selected account. Browser data is local to this device; keep backups regularly.</p></div>
+</section>
+</main><footer>MY TRADING JOURNAL PRO · Personal record keeping only</footer>
+</div><script src="app.js"></script>
+</body></html>
